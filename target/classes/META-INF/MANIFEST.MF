@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: ashok
+Build-Jdk: 12.0.1
+Implementation-Title: vehicle-demo
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: io.ashok
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/vehicle-demo
+Created-By: Maven Integration for Eclipse
+
