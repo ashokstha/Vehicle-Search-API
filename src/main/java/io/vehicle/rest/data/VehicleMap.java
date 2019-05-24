@@ -6,17 +6,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class VehicleMap implements Serializable{
+import io.vehicle.rest.util.RandomString;
+
+public class VehicleMap implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Map<String, Vehicle> Vehicles = new HashMap<String, Vehicle>();
 
-	private int currentVin = 1000;
-
 	public String getNextVin() {
-		currentVin++;
-		return String.valueOf(currentVin);
+		return RandomString.getALphaNum(17);
 	}
 
 	public void save(final Vehicle vehicle) {
