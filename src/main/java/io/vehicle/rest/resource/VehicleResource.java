@@ -54,8 +54,9 @@ public class VehicleResource {
 	}
 	
 	@PUT
-	public Response modify(Vehicle vehicle) {
-		vs.modify(vehicle);
+	@Path("/{vin}")
+	public Response modify(@PathParam("vin") final String vin, Vehicle vehicle) {
+		vs.modify(vin, vehicle);
 		return Response.noContent().build();
 	}
 	
@@ -67,8 +68,8 @@ public class VehicleResource {
 	}
 	
 	@PUT
-	@Path("/{vin}")
-	public Response changeStatus(@PathParam("vin") final String vin, @QueryParam("status")final String status) {
+	@Path("/{vin}/status/{status}")
+	public Response changeStatus(@PathParam("vin") final String vin, @PathParam("status")final String status) {
 		vs.changeStatus(vin, status);
 		return Response.noContent().build();
 	}

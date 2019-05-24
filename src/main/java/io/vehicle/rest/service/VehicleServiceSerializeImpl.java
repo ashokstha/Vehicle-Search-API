@@ -43,11 +43,16 @@ public class VehicleServiceSerializeImpl implements VehicleService {
 	}
 
 	@Override
-	public void modify(final Vehicle vehicle) {
+	public void modify(final String vin, Vehicle vehicle) {
+		vehicle.setVin(vin);
 		validateVehicle(vehicle);
 		final VehicleMap vehicleMap = this.getVehicleMap();
 		if (vehicleMap.find(vehicle.getVin()) == null) {
 			throw new VehicleNotFoundException("Vehicle not found!");
+		}
+
+		if (vehicle.getStatus() != Status.PENDING) {
+			throw new ValidationException("Vehicle status is not in PENDING!");
 		}
 
 		vehicleMap.save(vehicle);
@@ -75,7 +80,7 @@ public class VehicleServiceSerializeImpl implements VehicleService {
 		vehicleMap.remove(vin);
 		util.serialize(vehicleMap);
 	}
-	
+
 	public List<Status> getNextStatus(Status status) {
 		List<Status> lst = new ArrayList<Status>();
 		switch (status) {
@@ -120,12 +125,14 @@ public class VehicleServiceSerializeImpl implements VehicleService {
 		}
 
 		// check if next status is valid for current status
-		if (this.isValidNextStatus(vehicle.getStatus(), status)) {
-			vehicle.setStatus(status);
-			vehicleMap.save(vehicle);
-
-			util.serialize(vehicleMap);
+		if (!this.isValidNextStatus(vehicle.getStatus(), status)) {
+			throw new ValidationException("New Vehicle status is not Valid!");
 		}
+		
+		vehicle.setStatus(status);
+		vehicleMap.save(vehicle);
+
+		util.serialize(vehicleMap);
 
 	}
 
@@ -160,7 +167,7 @@ public class VehicleServiceSerializeImpl implements VehicleService {
 	public List<Vehicle> searchByModel(String model) {
 		final List<Vehicle> searchResult = new ArrayList<>();
 		this.getVehicleMap().getAll().forEach(e -> {
-			if (e.getModel() == model) {
+			if (e.getModel().equals(model)) {
 				searchResult.add(e);
 			}
 		});
@@ -172,8 +179,10 @@ public class VehicleServiceSerializeImpl implements VehicleService {
 	public List<Vehicle> searchByYear(String year) {
 		final List<Vehicle> searchResult = new ArrayList<>();
 		this.getVehicleMap().getAll().forEach(e -> {
-			if (e.getModelYear() == year) {
+			System.out.println("year: "+e.getModelYear() + " new year" + year);
+			if (e.getModelYear().equals(year)) {
 				searchResult.add(e);
+				System.out.println("Added to list");
 			}
 		});
 

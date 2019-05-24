@@ -2,8 +2,6 @@ package io.vehicle.rest.service;
 
 import java.util.List;
 
-import io.vehicle.rest.data.Make;
-import io.vehicle.rest.data.Status;
 import io.vehicle.rest.data.Vehicle;
 
 public interface VehicleService {	
@@ -12,7 +10,7 @@ public interface VehicleService {
 	
 	List<Vehicle> getVehicles ();
 	
-	void modify(final Vehicle vehicle);
+	void modify(final String vin, Vehicle vehicle);
 	
 	void remove(final String vin);
 	
