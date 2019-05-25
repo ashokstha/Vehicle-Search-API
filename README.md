@@ -11,3 +11,4 @@ Vehicle Search REST Api using Spring.
 
 ## Project Structure
 
+![alt text](https://github.com/ashokstha/Vehicle-Search-API/blob/master/vehicle-api.jpg)
