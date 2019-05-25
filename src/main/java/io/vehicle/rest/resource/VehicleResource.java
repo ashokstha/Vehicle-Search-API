@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import io.vehicle.rest.data.Vehicle;
+import io.vehicle.rest.data.VehicleMap;
 import io.vehicle.rest.service.VehicleService;
 
 @Service
@@ -44,56 +45,56 @@ public class VehicleResource {
 		Vehicle resultObj = vs.add(vehicle);
 		return Response.ok().entity(resultObj).build();
 	}
-	
+
 	@GET
 	@Path("/{vin}")
 	public Response findByVin(@PathParam("vin") final String vin) {
-		Vehicle vehicle = vs.findByVin(vin);		
+		Vehicle vehicle = vs.findByVin(vin);
 		return Response.ok().entity(vehicle).build();
-		
+
 	}
-	
+
 	@PUT
 	@Path("/{vin}")
 	public Response modify(@PathParam("vin") final String vin, Vehicle vehicle) {
 		vs.modify(vin, vehicle);
 		return Response.noContent().build();
 	}
-	
+
 	@DELETE
 	@Path("/{vin}")
 	public Response delete(@PathParam("vin") final String vin) {
 		vs.remove(vin);
 		return Response.noContent().build();
 	}
-	
+
 	@PUT
 	@Path("/{vin}/status/{status}")
-	public Response changeStatus(@PathParam("vin") final String vin, @PathParam("status")final String status) {
+	public Response changeStatus(@PathParam("vin") final String vin, @PathParam("status") final String status) {
 		vs.changeStatus(vin, status);
 		return Response.noContent().build();
 	}
-	
+
 	@GET
 	@Path("/search")
-	public List<Vehicle>  searchByMake(@QueryParam("make") final String make,@QueryParam("model") final String model,
+	public List<Vehicle> searchByMake(@QueryParam("make") final String make, @QueryParam("model") final String model,
 			@QueryParam("year") final String year, @QueryParam("price") final String price) {
-		List<Vehicle> vehicles = new ArrayList<>();
-		
-		if(make!=null)
-			vehicles.addAll(vs.searchByMake(make));
-		
-		if(model!=null)
-			vehicles.addAll(vs.searchByModel(model));
-		
-		if(year!=null)
-			vehicles.addAll(vs.searchByYear(year));
-		
-		if(price!=null)
-			vehicles.addAll(vs.searchByPrice(price));
-		
-		
-		return vehicles;
+
+		VehicleMap vehicleMap = new VehicleMap();
+
+		if (make != null)
+			vs.searchByMake(make).forEach(e -> vehicleMap.save(e));
+
+		if (model != null)
+			vs.searchByModel(model).forEach(e -> vehicleMap.save(e));
+
+		if (year != null)
+			vs.searchByYear(year).forEach(e -> vehicleMap.save(e));
+
+		if (price != null)
+			vs.searchByPrice(price).forEach(e -> vehicleMap.save(e));
+
+		return vehicleMap.getAll();
 	}
 
 }
